@@ -20,13 +20,17 @@ def render_plain(diff, parent=''):
         match node['type']:
             case 'added':
                 value = format_value(node['value'])
-                lines.append(f"Property '{full_key}' was added with value: {value}")
+                lines.append(
+                    f"Property '{full_key}' was added with value: {value}")
             case 'removed':
                 lines.append(f"Property '{full_key}' was removed")
             case 'changed':
                 old_value = format_value(node['old_value'])
                 new_value = format_value(node['new_value'])
-                lines.append(f"Property '{full_key}' was updated. From {old_value} to {new_value}")
+                lines.append(
+                    f"Property '{full_key}' was updated. From {old_value} "
+                    f"to {new_value}"
+                )
             case 'nested':
                 lines.append(render_plain(node['children'], full_key))
 

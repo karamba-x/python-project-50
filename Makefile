@@ -1,7 +1,7 @@
 install:
 	uv sync
 lint:
-	uv run ruff check
+	uv run ruff check --fix
 test:
 	uv run pytest
 test-coverage:

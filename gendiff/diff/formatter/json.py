@@ -1,4 +1,3 @@
-import json
 
 
 def format_value(value):

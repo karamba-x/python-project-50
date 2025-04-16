@@ -1,10 +1,13 @@
 import os
+
 from gendiff.scripts.generate_diff import generate_diff
 
 TEST_DIR = os.path.join(os.path.dirname(__file__), 'test_data')
 
+
 def get_path(filename):
     return os.path.join(TEST_DIR, filename)
+
 
 def test_identical_files():
     file1 = get_path('file1.json')
@@ -17,6 +20,7 @@ def test_identical_files():
     timeout: 50
 }'''
     assert generate_diff(file1, file2) == expected
+
 
 def test_diff_flat_files():
     file1 = get_path('file1.json')
@@ -32,6 +36,7 @@ def test_diff_flat_files():
 }'''
     assert generate_diff(file1, file2) == expected
 
+
 def test_identical_yaml_files():
     file1 = get_path('file1.yml')
     file2 = get_path('file1.yml')
@@ -43,6 +48,7 @@ def test_identical_yaml_files():
     timeout: 50
 }'''
     assert generate_diff(file1, file2) == expected
+
 
 def test_diff_flat_yaml_files():
     file1 = get_path('file1.yml')
@@ -110,6 +116,7 @@ def test_nested_json_diff():
 
     assert generate_diff(file1, file2) == expected
 
+
 def test_plain_format():
     file1 = get_path('nested1.json')
     file2 = get_path('nested2.json')
@@ -127,6 +134,7 @@ Property 'group2' was removed
 Property 'group3' was added with value: [complex value]'''
 
     assert generate_diff(file1, file2, 'plain') == expected
+
 
 def test_json_format():
     file1 = get_path('nested1.json')
