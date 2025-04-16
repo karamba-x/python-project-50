@@ -1,6 +1,8 @@
 def format_value(value):
     if isinstance(value, dict):
         return '[complex value]'
+    if isinstance(value, str):
+        return f"'{value}'"
     if isinstance(value, bool):
         return 'true' if value else 'false'
     if value is None:
@@ -26,6 +28,6 @@ def render_plain(diff, parent=''):
                 new_value = format_value(node['new_value'])
                 lines.append(f"Property '{full_key}' was updated. From {old_value} to {new_value}")
             case 'nested':
-                lines.extend(render_plain(node['children'], full_key))
+                lines.append(render_plain(node['children'], full_key))
 
-    return lines
+    return '\n'.join(lines)
