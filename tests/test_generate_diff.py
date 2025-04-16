@@ -11,7 +11,7 @@ def test_identical_files():
     file2 = get_path('file1.json')
 
     expected = '''{
-    follow: False
+    follow: false
     host: hexlet.io
     proxy: 123.234.53.22
     timeout: 50
@@ -23,12 +23,12 @@ def test_diff_flat_files():
     file2 = get_path('file2.json')
 
     expected = '''{
-  - follow: False
+  - follow: false
     host: hexlet.io
   - proxy: 123.234.53.22
   - timeout: 50
   + timeout: 20
-  + verbose: True
+  + verbose: true
 }'''
     assert generate_diff(file1, file2) == expected
 
@@ -37,7 +37,7 @@ def test_identical_yaml_files():
     file2 = get_path('file1.yml')
 
     expected = '''{
-    follow: False
+    follow: false
     host: hexlet.io
     proxy: 123.234.53.22
     timeout: 50
@@ -49,11 +49,63 @@ def test_diff_flat_yaml_files():
     file2 = get_path('file2.yml')
 
     expected = '''{
-  - follow: False
+  - follow: false
     host: hexlet.io
   - proxy: 123.234.53.22
   - timeout: 50
   + timeout: 20
-  + verbose: True
+  + verbose: true
 }'''
+    assert generate_diff(file1, file2) == expected
+
+
+def test_nested_json_diff():
+    file1 = get_path('nested1.json')
+    file2 = get_path('nested2.json')
+
+    expected = '''{
+    common: {
+      + follow: false
+        setting1: Value 1
+      - setting2: 200
+      - setting3: true
+      + setting3: null
+      + setting4: blah blah
+      + setting5: {
+            key5: value5
+        }
+        setting6: {
+            doge: {
+              - wow: 
+              + wow: so much
+            }
+            key: value
+          + ops: vops
+        }
+    }
+    group1: {
+      - baz: bas
+      + baz: bars
+        foo: bar
+      - nest: {
+            key: value
+        }
+      + nest: str
+    }
+  - group2: {
+        abc: 12345
+        deep: {
+            id: 45
+        }
+    }
+  + group3: {
+        deep: {
+            id: {
+                number: 45
+            }
+        }
+        fee: 100500
+    }
+}'''
+
     assert generate_diff(file1, file2) == expected

@@ -1,22 +1,14 @@
-from gendiff.scripts.parsers import parse_data
+from gendiff.parser import parse_data
+from gendiff.diff.builder import build_diff
+from gendiff.diff.formatter.stylish import render_stylish
 
-def generate_diff(file_path1, file_path2):
-    dict1 = parse_data(file_path1)
-    dict2 = parse_data(file_path2)
+def generate_diff(file_path1, file_path2, format_name='stylish'):
+    data1 = parse_data(file_path1)
+    data2 = parse_data(file_path2)
 
-    all_keys = sorted(set(dict1.keys()) | set(dict2.keys()))
-    lines = ['{']
+    diff = build_diff(data1, data2)
 
-    for key in all_keys:
-        if key in dict1 and key not in dict2:
-            lines.append(f"  - {key}: {dict1[key]}")
-        elif key not in dict1 and key in dict2:
-            lines.append(f"  + {key}: {dict2[key]}")
-        elif dict1[key] != dict2[key]:
-            lines.append(f"  - {key}: {dict1[key]}")
-            lines.append(f"  + {key}: {dict2[key]}")
-        else:
-            lines.append(f"    {key}: {dict1[key]}")
-
-    lines.append('}')
-    return '\n'.join(lines)
+    if format_name == 'stylish':
+        return '{\n' + render_stylish(diff) + '\n}'
+    else:
+        raise ValueError(f"Unknown format: {format_name}")
