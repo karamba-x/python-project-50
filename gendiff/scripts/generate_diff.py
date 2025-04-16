@@ -1,25 +1,22 @@
-import json
+from gendiff.scripts.parsers import parse_data
 
+def generate_diff(file_path1, file_path2):
+    dict1 = parse_data(file_path1)
+    dict2 = parse_data(file_path2)
 
-def generate_diff(file1_path, file2_path):
+    all_keys = sorted(set(dict1.keys()) | set(dict2.keys()))
+    lines = ['{']
 
-    with open(file1_path) as f1, open(file2_path) as f2:
-        data1 = json.load(f1)
-        data2 = json.load(f2)
-
-    keys = sorted(set(data1.keys()) | set(data2.keys()))
-    result = ['{']
-
-    for key in keys:
-        if key in data1 and key not in data2:
-            result.append(f"  - {key}: {data1[key]}")
-        elif key not in data1 and key in data2:
-            result.append(f"  + {key}: {data2[key]}")
-        elif data1[key] != data2[key]:
-            result.append(f"  - {key}: {data1[key]}")
-            result.append(f"  + {key}: {data2[key]}")
+    for key in all_keys:
+        if key in dict1 and key not in dict2:
+            lines.append(f"  - {key}: {dict1[key]}")
+        elif key not in dict1 and key in dict2:
+            lines.append(f"  + {key}: {dict2[key]}")
+        elif dict1[key] != dict2[key]:
+            lines.append(f"  - {key}: {dict1[key]}")
+            lines.append(f"  + {key}: {dict2[key]}")
         else:
-            result.append(f"    {key}: {data1[key]}")
+            lines.append(f"    {key}: {dict1[key]}")
 
-    result.append('}')
-    return '\n'.join(result)
+    lines.append('}')
+    return '\n'.join(lines)

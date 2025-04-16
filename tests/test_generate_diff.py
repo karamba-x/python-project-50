@@ -31,3 +31,29 @@ def test_diff_flat_files():
   + verbose: True
 }'''
     assert generate_diff(file1, file2) == expected
+
+def test_identical_yaml_files():
+    file1 = get_path('file1.yml')
+    file2 = get_path('file1.yml')
+
+    expected = '''{
+    follow: False
+    host: hexlet.io
+    proxy: 123.234.53.22
+    timeout: 50
+}'''
+    assert generate_diff(file1, file2) == expected
+
+def test_diff_flat_yaml_files():
+    file1 = get_path('file1.yml')
+    file2 = get_path('file2.yml')
+
+    expected = '''{
+  - follow: False
+    host: hexlet.io
+  - proxy: 123.234.53.22
+  - timeout: 50
+  + timeout: 20
+  + verbose: True
+}'''
+    assert generate_diff(file1, file2) == expected
