@@ -127,3 +127,102 @@ Property 'group2' was removed
 Property 'group3' was added with value: [complex value]'''
 
     assert generate_diff(file1, file2, 'plain') == expected
+
+def test_json_format():
+    file1 = get_path('nested1.json')
+    file2 = get_path('nested2.json')
+
+    expected = '''[
+  {
+    "key": "common",
+    "status": "nested",
+    "children": [
+      {
+        "key": "follow",
+        "status": "added",
+        "value": "false"
+      },
+      {
+        "key": "setting1"
+      },
+      {
+        "key": "setting2",
+        "status": "removed"
+      },
+      {
+        "key": "setting3",
+        "status": "changed",
+        "old_value": "true",
+        "new_value": "null"
+      },
+      {
+        "key": "setting4",
+        "status": "added",
+        "value": "blah blah"
+      },
+      {
+        "key": "setting5",
+        "status": "added",
+        "value": "[complex value]"
+      },
+      {
+        "key": "setting6",
+        "status": "nested",
+        "children": [
+          {
+            "key": "doge",
+            "status": "nested",
+            "children": [
+              {
+                "key": "wow",
+                "status": "changed",
+                "old_value": "",
+                "new_value": "so much"
+              }
+            ]
+          },
+          {
+            "key": "key"
+          },
+          {
+            "key": "ops",
+            "status": "added",
+            "value": "vops"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "group1",
+    "status": "nested",
+    "children": [
+      {
+        "key": "baz",
+        "status": "changed",
+        "old_value": "bas",
+        "new_value": "bars"
+      },
+      {
+        "key": "foo"
+      },
+      {
+        "key": "nest",
+        "status": "changed",
+        "old_value": "[complex value]",
+        "new_value": "str"
+      }
+    ]
+  },
+  {
+    "key": "group2",
+    "status": "removed"
+  },
+  {
+    "key": "group3",
+    "status": "added",
+    "value": "[complex value]"
+  }
+]'''
+
+    assert generate_diff(file1, file2, 'json') == expected
