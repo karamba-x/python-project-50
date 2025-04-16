@@ -14,7 +14,7 @@ def generate_diff(file_path1, file_path2, format_name='stylish'):
     if format_name == 'stylish':
         return '{\n' + render_stylish(diff) + '\n}'
     elif format_name == 'plain':
-        return '\n'.join(render_plain(diff))
+        return render_plain(diff)
     elif format_name == 'json':
         return json.dumps(render_json(diff), indent=2)
     else:
